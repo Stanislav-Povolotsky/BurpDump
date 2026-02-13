@@ -41,11 +41,12 @@ jobs:
         run: |
           chmod +x build.sh
           ./build.sh "${{ steps.version.outputs.version }}"
+          mv build/BurpDump.jar "build/BurpDump-${{ steps.version.outputs.tag }}.jar"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
           name: BurpDump ${{ steps.version.outputs.tag }}
-          files: build/BurpDump.jar
+          files: build/BurpDump-${{ steps.version.outputs.tag }}.jar
           generate_release_notes: true
