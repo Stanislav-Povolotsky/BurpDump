@@ -1,0 +1,14 @@
+# Build output
+build/
+
+# IDE / editor
+.idea/
+*.iml
+.vscode/
+*.swp
+*~
+
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # need full history for tag listing
+
+      - name: Determine next version
+        id: version
+        run: |
+          # Find the latest vX.Y.Z tag (by version sort).
+          # If the user deletes a release AND its tag, the previous tag
+          # becomes "latest" again, so the same version number is re-used.
+          LATEST=$(git tag -l 'v*' --sort=-v:refname | head -n1)
+          if [ -z "$LATEST" ]; then
+            NEW="1.0.0"
+          else
+            IFS='.' read -r MAJOR MINOR PATCH <<< "${LATEST#v}"
+            PATCH=$((PATCH + 1))
+            NEW="$MAJOR.$MINOR.$PATCH"
+          fi
+          echo "version=$NEW"   >> "$GITHUB_OUTPUT"
+          echo "tag=v$NEW"      >> "$GITHUB_OUTPUT"
+          echo "### Next version: **v$NEW**" >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      - name: Build JAR
+        run: |
+          chmod +x build.sh
+          ./build.sh "${{ steps.version.outputs.version }}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: BurpDump ${{ steps.version.outputs.tag }}
+          files: build/BurpDump.jar
+          generate_release_notes: true

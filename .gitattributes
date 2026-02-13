@@ -1,0 +1,15 @@
+# Auto-detect text files and normalise line endings
+* text=auto
+
+# Force batch scripts to keep CRLF on checkout
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Java sources - LF everywhere
+*.java text eol=lf
+
+# Markdown
+*.md text eol=lf
+
+# Binary
+*.jar binary
