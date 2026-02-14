@@ -179,7 +179,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory,
 
         if (selected != null && !selected.isEmpty()) {
             JMenuItem mi = new JMenuItem(
-                    "BurpDump: Export " + selected.size()
+                    "Export " + selected.size()
                             + " WebSocket message(s)");
             mi.addActionListener(e -> onExportMontoyaWsSelected(selected));
             items.add(mi);
@@ -187,14 +187,14 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory,
 
         if (montoyaApi != null) {
             JMenuItem allMi = new JMenuItem(
-                    "BurpDump: Export all WebSocket history");
+                    "Export all WebSocket history");
             allMi.addActionListener(e -> onExportMontoyaWsAll());
             items.add(allMi);
         }
 
         {
             JMenuItem allMi = new JMenuItem(
-                    "BurpDump: Export all (HTTP + WebSocket)");
+                    "Export all (HTTP + WebSocket)");
             allMi.addActionListener(e -> onExportEverything());
             items.add(allMi);
         }
@@ -482,34 +482,40 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory,
             final IHttpRequestResponse[] selected = messages;
             final byte context = ctx;
             JMenuItem mi = new JMenuItem(
-                    "BurpDump: Save " + messages.length + " item(s)");
+                    "Save " + messages.length + " item(s)");
             mi.addActionListener(e -> onExport(selected, context));
             items.add(mi);
         }
 
+        // Bulk-export items — only in list-like contexts (not in
+        // single-message editors/viewers such as Repeater).
+        boolean bulkContext = ctx >= IContextMenuInvocation.CONTEXT_TARGET_SITE_MAP_TREE;
+
         // WebSocket export (if frames have been captured)
-        synchronized (wsFrames) {
-            if (!wsFrames.isEmpty()) {
-                int n = wsFrames.size();
-                JMenuItem ws = new JMenuItem(
-                        "BurpDump: Export " + n + " WebSocket message(s)");
-                ws.addActionListener(e -> onExportWebSocket());
-                items.add(ws);
+        if (bulkContext) {
+            synchronized (wsFrames) {
+                if (!wsFrames.isEmpty()) {
+                    int n = wsFrames.size();
+                    JMenuItem ws = new JMenuItem(
+                            "Export " + n + " WebSocket message(s)");
+                    ws.addActionListener(e -> onExportWebSocket());
+                    items.add(ws);
+                }
             }
         }
 
         // Export entire proxy HTTP history
-        {
+        if (bulkContext) {
             JMenuItem allHttp = new JMenuItem(
-                    "BurpDump: Export all Proxy History");
+                    "Export all Proxy History");
             allHttp.addActionListener(e -> onExportAllHttpHistory());
             items.add(allHttp);
         }
 
         // Export everything (HTTP + WebSocket)
-        {
+        if (bulkContext) {
             JMenuItem allMi = new JMenuItem(
-                    "BurpDump: Export all (HTTP + WebSocket)");
+                    "Export all (HTTP + WebSocket)");
             allMi.addActionListener(e -> onExportEverything());
             items.add(allMi);
         }
