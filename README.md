@@ -2,6 +2,63 @@
 
 Exports selected HTTP history items (and captured WebSocket frames) to the filesystem, preserving the URL path structure with second-level domain grouping.
 
+![Context menu](doc/screenshots/site-map.png)
+
+Example of the resulting directory structure:
+````
+├───google.com
+│   ├───accounts.google.com
+│   │   │   index.request
+│   │   │
+│   │   ├───gsi
+│   │   │   │   button.request
+│   │   │   │   client
+│   │   │   │   client.request
+│   │   │   │   client.response
+│   │   │   │   fedcm.json.request
+│   │   │   │   index.request
+│   │   │   │   log.request
+│   │   │   │   revoke.request
+│   │   │   │   select.request
+│   │   │   │   status.request
+│   │   │   │   style
+│   │   │   │   style.request
+│   │   │   │   style.response
+│   │   │   │
+│   │   │   ├───fedcm
+│   │   │   │   └───config
+│   │   │   │           active.json.request
+│   │   │   │           passive.json.request
+│   │   │   │
+│   │   │   └───iframe
+│   │   │           select.request
+│   │   │
+│   │   └───o
+│   │       └───oauth2
+│   │           │   iframe.request
+│   │           │
+│   │           └───v2
+│   │                   auth.request
+│   │
+│   └───android.clients.google.com
+│       │   index.request
+│       │
+│       └───c2dm
+│               register3.(2)
+│               register3.(2).request
+│               register3.(2).request.data
+│               register3.(2).response
+│               register3.request
+│
+└───reddit.com
+    └───alb.reddit.com
+            i.gif.request
+            track.(2)
+            track.(2).request
+            track.(2).request.data
+            track.(2).response
+````
+
 ## Output Format
 
 ### HTTP History
