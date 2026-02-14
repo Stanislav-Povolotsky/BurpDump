@@ -40,7 +40,7 @@ jobs:
       - name: Build JAR
         run: |
           chmod +x build.sh
-          ./build.sh "${{ steps.version.outputs.version }}"
+          ./build.sh "${{ steps.version.outputs.version }}" "${{ github.server_url }}/${{ github.repository }}"
           mv build/BurpDump.jar "build/BurpDump-${{ steps.version.outputs.tag }}.jar"
 
       - name: Create GitHub Release

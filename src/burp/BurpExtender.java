@@ -49,6 +49,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory,
 
     private String version   = "dev";
     private String buildDate = "";
+    private String repoUrl   = "";
 
     /* ================================================================== */
     /*  WebSocket frame storage                                           */
@@ -125,7 +126,8 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory,
         }
 
         callbacks.printOutput("BurpDump v" + version + " loaded."
-                + (buildDate.isEmpty() ? "" : "  (built " + buildDate + ")"));
+                + (buildDate.isEmpty() ? "" : "  (built " + buildDate + ")")
+                + (repoUrl.isEmpty()   ? "" : "  " + repoUrl));
     }
 
     private void loadBuildInfo() {
@@ -135,6 +137,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory,
                 props.load(is);
                 version   = props.getProperty("version",    version);
                 buildDate = props.getProperty("build.date", buildDate);
+                repoUrl   = props.getProperty("repo.url",   repoUrl);
             }
         } catch (Exception ignored) { }
     }

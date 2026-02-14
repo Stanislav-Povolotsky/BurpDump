@@ -12,9 +12,11 @@ set "SRC=%ROOT%src"
 set "API=%ROOT%api"
 set "JAR=%BUILD%\BurpDump.jar"
 
-rem ---- Optional version parameter (default: dev) ----
+rem ---- Optional parameters ----
 set "VER=%~1"
 if "%VER%"=="" set "VER=dev"
+set "REPO=%~2"
+if "%REPO%"=="" set "REPO=private build"
 
 rem ---- Build date ----
 for /f "tokens=*" %%d in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd"') do set "BUILD_DATE=%%d"
@@ -28,6 +30,7 @@ mkdir "%BUILD%\burp" 2>nul
 (
     echo version=%VER%
     echo build.date=%BUILD_DATE%
+    echo repo.url=%REPO%
 ) > "%BUILD%\burp\build-info.properties"
 
 rem ---- Generate MANIFEST.MF ----

@@ -12,8 +12,9 @@ SRC="$ROOT/src"
 API="$ROOT/api"
 JAR="$BUILD/BurpDump.jar"
 
-# ---- Optional version parameter (default: dev) ----
+# ---- Optional parameters ----
 VER="${1:-dev}"
+REPO="${2:-private build}"
 BUILD_DATE="$(date +%Y-%m-%d)"
 
 # ---- Clean previous build ----
@@ -24,6 +25,7 @@ mkdir -p "$BUILD/burp"
 cat > "$BUILD/burp/build-info.properties" <<EOF
 version=$VER
 build.date=$BUILD_DATE
+repo.url=$REPO
 EOF
 
 # ---- Generate MANIFEST.MF ----
